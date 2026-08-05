@@ -1,12 +1,9 @@
-import { IsString } from 'class-validator';
-import { Field, InputType, PartialType } from '@nestjs/graphql';
-
-@InputType()
-export class CreateUserDto {
-  @IsString()
-  @Field()
-  firstName!: string;
-}
-
-@InputType()
-export class UpdateUserDto extends PartialType(CreateUserDto) {}
+export * from './user.dto';
+export * from './patient.dto';
+export * from './department.dto';
+export * from './room.dto';
+export * from './appointment.dto';
+export * from './examination.dto';
+export * from './test-request.dto';
+export * from './prescription.dto';
+export * from './medical-document.dto';

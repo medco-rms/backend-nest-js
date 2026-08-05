@@ -1,14 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { ObjectType, Field, ID } from '@nestjs/graphql';
-
-@Entity()
-@ObjectType()
-export class User {
-  @PrimaryGeneratedColumn()
-  @Field(() => ID)
-  id: number | undefined;
-
-  @Column()
-  @Field()
-  firstName!: string;
-}
+export * from './user.entity';
+export * from './patient.entity';
+export * from './department.entity';
+export * from './room.entity';
+export * from './appointment.entity';
+export * from './examination.entity';
+export * from './test-request.entity';
+export * from './prescription.entity';
+export * from './medical-document.entity';

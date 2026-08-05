@@ -17,15 +17,15 @@ export abstract class BaseService<
     return this.repo.find();
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.repo.findOneBy({ id } as any);
   }
 
-  update(id: number, dto: UpdateDto):Promise<UpdateResult>  {
+  update(id: string, dto: UpdateDto): Promise<UpdateResult> {
     return this.repo.update(id, dto);
   }
 
-  remove(id: number): Promise<DeleteResult> {
+  remove(id: string): Promise<DeleteResult> {
     return this.repo.delete(id);
   }
 }

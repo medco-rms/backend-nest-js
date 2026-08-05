@@ -3,7 +3,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { UsersModule } from './modules/index';
+import {
+  AppointmentsModule,
+  DepartmentsModule,
+  ExaminationsModule,
+  MedicalDocumentsModule,
+  PatientsModule,
+  PrescriptionsModule,
+  RoomsModule,
+  TestRequestsModule,
+  UsersModule,
+} from './modules/index';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -34,6 +44,14 @@ import { UsersModule } from './modules/index';
       }),
     }),
     UsersModule,
+    PatientsModule,
+    DepartmentsModule,
+    RoomsModule,
+    AppointmentsModule,
+    ExaminationsModule,
+    TestRequestsModule,
+    PrescriptionsModule,
+    MedicalDocumentsModule,
   ],
   controllers: [],
   providers: [],

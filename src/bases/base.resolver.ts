@@ -5,9 +5,9 @@ type Type<T = any> = new (...args: any[]) => T;
 export interface BaseService<TCreateDto = any, TUpdateDto = any> {
   create(dto: TCreateDto): Promise<any>;
   findAll(): Promise<any[]>;
-  findOne(id: number): Promise<any | null>;
-  update(id: number, dto: TUpdateDto): Promise<any>;
-  remove(id: number): Promise<any>;
+  findOne(id: string): Promise<any | null>;
+  update(id: string, dto: TUpdateDto): Promise<any>;
+  remove(id: string): Promise<any>;
 }
 
 export function BaseResolver<
@@ -33,7 +33,7 @@ export function BaseResolver<
     }
 
     @Query(() => entityType, { name: collectionName.slice(0, -1) })
-    async findOne(@Args('id', { type: () => ID }) id: number) {
+    async findOne(@Args('id', { type: () => ID }) id: string) {
       const result = await this.service.findOne(id);
 
       if (!result) {
@@ -50,7 +50,7 @@ export function BaseResolver<
 
     @Mutation(() => entityType, { name: `update${entityType.name}` })
     async update(
-      @Args('id', { type: () => ID }) id: number,
+      @Args('id', { type: () => ID }) id: string,
       @Args('input', { type: () => updateInputType }) dto: TUpdateDto,
     ) {
       await this.service.update(id, dto);
@@ -64,7 +64,7 @@ export function BaseResolver<
     }
 
     @Mutation(() => Boolean, { name: `remove${entityType.name}` })
-    async remove(@Args('id', { type: () => ID }) id: number) {
+    async remove(@Args('id', { type: () => ID }) id: string) {
       await this.service.remove(id);
       return true;
     }
