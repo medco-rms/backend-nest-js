@@ -1,4 +1,4 @@
-import { Resolver } from '@nestjs/graphql';
+import { Args, GraphQLISODateTime, Query, Resolver } from '@nestjs/graphql';
 import { BaseResolver } from '../bases/base.resolver';
 import {
   Appointment,
@@ -21,6 +21,7 @@ import {
   RoomService,
   TestRequestService,
   UserService,
+  UtilService,
 } from '../services';
 import {
   CreateAppointmentDto,
@@ -52,6 +53,11 @@ export class UserResolver extends BaseResolver<
 >(User, CreateUserDto, UpdateUserDto, 'users') {
   constructor(service: UserService) {
     super(service);
+  }
+
+  @Query(() => [User], { name: 'filterUser' })
+  async filterUser(@Args('role') role: string) {
+    return this.service.filterUser(role);
   }
 }
 
@@ -145,8 +151,23 @@ export class MedicalDocumentResolver extends BaseResolver<
   CreateMedicalDocumentDto,
   UpdateMedicalDocumentDto,
   MedicalDocumentService
->(MedicalDocument, CreateMedicalDocumentDto, UpdateMedicalDocumentDto, 'medicalDocuments') {
+>(
+  MedicalDocument,
+  CreateMedicalDocumentDto,
+  UpdateMedicalDocumentDto,
+  'medicalDocuments',
+) {
   constructor(service: MedicalDocumentService) {
     super(service);
+  }
+}
+
+@Resolver()
+export class UtilResolver {
+  constructor(private readonly service: UtilService) {}
+
+  @Query(() => GraphQLISODateTime, { name: 'serverTime' })
+  async serverTime(): Promise<Date> {
+    return this.service.serverTime();
   }
 }

@@ -1,10 +1,17 @@
-import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+  ID,
+  GraphQLISODateTime,
+  Int,
+} from '@nestjs/graphql';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  Generated,
 } from 'typeorm';
 
 @Entity()
@@ -14,8 +21,9 @@ export class Patient {
   @Field(() => ID)
   id!: string;
 
-  @Column()
-  @Field()
+  @Column({ type: 'int', nullable: true, unique: true })
+  @Generated('increment')
+  @Field(() => Int, { nullable: true })
   cardNumber!: string;
 
   @Column()

@@ -1,13 +1,14 @@
-import { Field, InputType, PartialType, GraphQLISODateTime } from '@nestjs/graphql';
+import {
+  Field,
+  InputType,
+  PartialType,
+  GraphQLISODateTime,
+} from '@nestjs/graphql';
 import { IsDate, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 @InputType()
 export class CreatePatientDto {
-  @Field()
-  @IsString()
-  cardNumber!: string;
-
   @Field()
   @IsString()
   firstName!: string;

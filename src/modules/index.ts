@@ -21,6 +21,7 @@ import {
   RoomResolver,
   TestRequestResolver,
   UserResolver,
+  UtilResolver,
 } from '../resolvers';
 import {
   AppointmentService,
@@ -32,6 +33,7 @@ import {
   RoomService,
   TestRequestService,
   UserService,
+  UtilService,
 } from '../services';
 
 @Module({
@@ -87,3 +89,9 @@ export class PrescriptionsModule {}
   providers: [MedicalDocumentResolver, MedicalDocumentService],
 })
 export class MedicalDocumentsModule {}
+
+@Module({
+  imports: [],
+  providers: [UtilResolver, UtilService],
+})
+export class UtilModule {}

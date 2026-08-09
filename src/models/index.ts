@@ -1,27 +1,16 @@
 export type UserRole =
-  | "DOCTOR"
-  | "TECHNICIAN"
-  | "PHARMACIST"
-  | "NURSE"
-  | "FRONT_DESK"
-  | "STAFF";
-export type Gender = "MALE" | "FEMALE" | "OTHER";
-export type DepartmentType = "EXAMINATION" | "LAB" | "SCAN" | "PHARMACY";
-export type TestType = "LAB" | "SCAN";
-export type roomStatus = "AVAILABLE" | "BUSY";
+  'DOCTOR' | 'TECHNICIAN' | 'PHARMACIST' | 'NURSE' | 'FRONT_DESK' | 'STAFF';
+export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
+export type DepartmentType = 'EXAMINATION' | 'LAB' | 'SCAN' | 'PHARMACY';
+export type TestType = 'LAB' | 'SCAN';
+export type roomStatus = 'AVAILABLE' | 'BUSY';
 export type appointmentStatus =
-  | "PENDING"
-  | "CONFIRMED"
-  | "COMPLETED"
-  | "CANCELLED";
-export type examinationStatus = "OPEN" | "WAITING_RESULT" | "COMPLETED";
+  'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED';
+export type examinationStatus = 'OPEN' | 'WAITING_RESULT' | 'COMPLETED';
 export type testRequestStatus =
-  | "PENDING"
-  | "ACCEPTED"
-  | "PROCESSING"
-  | "COMPLETED";
-export type prescriptionStatus = "PENDING" | "PROCESSING" | "COMPLETED";
-export type medicalDocumentType = "REPORT" | "IMAGE" | "REFERRAL" | "OTHER";
+  'PENDING' | 'ACCEPTED' | 'PROCESSING' | 'COMPLETED';
+export type prescriptionStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED';
+export type medicalDocumentType = 'REPORT' | 'IMAGE' | 'REFERRAL' | 'OTHER';
 
 export interface User {
   id: string;
@@ -43,7 +32,7 @@ export interface User {
   // Role & Organization
   role: UserRole;
   departmentId?: string;
-  employeeId?: string;
+  employeeId?: number;
 
   // Professional Information
   specialization?: string;
@@ -54,10 +43,6 @@ export interface User {
   experienceYears?: number;
   joiningDate?: Date;
 
-  // Emergency / Personal Info
-  emergencyContactName?: string;
-  emergencyContactPhone?: string;
-
   note?: string;
 
   createdAt: Date;
@@ -67,7 +52,7 @@ export interface User {
 export interface Patient {
   id: string;
 
-  cardNumber: string;
+  cardNumber?: string;
   firstName: string;
   lastName: string;
 

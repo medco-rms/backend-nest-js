@@ -35,9 +35,19 @@ import {
 } from '../entities';
 
 @Injectable()
-export class UserService extends BaseService<User, CreateUserDto, UpdateUserDto> {
+export class UserService extends BaseService<
+  User,
+  CreateUserDto,
+  UpdateUserDto
+> {
   constructor(@InjectRepository(User) repo: Repository<User>) {
     super(repo);
+  }
+
+  async filterUser(role: string): Promise<User[]> {
+    return this.repo.find({
+      where: { role },
+    });
   }
 }
 
@@ -64,7 +74,11 @@ export class DepartmentService extends BaseService<
 }
 
 @Injectable()
-export class RoomService extends BaseService<Room, CreateRoomDto, UpdateRoomDto> {
+export class RoomService extends BaseService<
+  Room,
+  CreateRoomDto,
+  UpdateRoomDto
+> {
   constructor(@InjectRepository(Room) repo: Repository<Room>) {
     super(repo);
   }
@@ -120,7 +134,17 @@ export class MedicalDocumentService extends BaseService<
   CreateMedicalDocumentDto,
   UpdateMedicalDocumentDto
 > {
-  constructor(@InjectRepository(MedicalDocument) repo: Repository<MedicalDocument>) {
+  constructor(
+    @InjectRepository(MedicalDocument) repo: Repository<MedicalDocument>,
+  ) {
     super(repo);
+  }
+}
+
+@Injectable()
+export class UtilService {
+  constructor() {}
+  async serverTime(): Promise<Date> {
+    return new Date();
   }
 }
