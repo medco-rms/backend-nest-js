@@ -32,7 +32,7 @@ export class Patient {
 
   @Column()
   @Field()
-  lastName!: string;
+  middleName!: string;
 
   @Column()
   @Field()
@@ -61,6 +61,18 @@ export class Patient {
   @Column({ nullable: true })
   @Field({ nullable: true })
   emergencyContactPhone?: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  nationalID?: string;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  @Field(() => GraphQLISODateTime)
+  cardNumberExpiryDate!: Date;
+
+  @Column({ nullable: true, default: 'ACTIVE' })
+  @Field({ nullable: true, defaultValue: 'ACTIVE' })
+  status?: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   @Field(() => GraphQLISODateTime)

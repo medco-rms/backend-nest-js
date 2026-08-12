@@ -19,7 +19,8 @@ export class CreateUserDto {
   @IsString()
   middleName?: string;
 
-  @Field()
+  @Field({ nullable: true })
+  @IsOptional()
   @IsString()
   lastName!: string;
 
@@ -44,7 +45,8 @@ export class CreateUserDto {
   @IsEmail()
   email?: string;
 
-  @Field()
+  @Field({ nullable: true })
+  @IsOptional()
   @IsString()
   phone!: string;
 

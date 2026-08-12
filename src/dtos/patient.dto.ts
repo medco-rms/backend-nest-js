@@ -15,7 +15,7 @@ export class CreatePatientDto {
 
   @Field()
   @IsString()
-  lastName!: string;
+  middleName!: string;
 
   @Field()
   @IsString()
@@ -39,6 +39,15 @@ export class CreatePatientDto {
   @IsOptional()
   @IsString()
   bloodGroup?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  nationalID?: string;
+
+  @Field()
+  @IsDate()
+  cardNumberExpiryDate!: Date;
 
   @Field({ nullable: true })
   @IsOptional()
