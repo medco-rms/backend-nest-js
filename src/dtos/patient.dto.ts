@@ -1,4 +1,9 @@
-import { Field, InputType, PartialType, GraphQLISODateTime } from '@nestjs/graphql';
+import {
+  Field,
+  InputType,
+  PartialType,
+  GraphQLISODateTime,
+} from '@nestjs/graphql';
 import { IsDate, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -6,15 +11,11 @@ import { Type } from 'class-transformer';
 export class CreatePatientDto {
   @Field()
   @IsString()
-  cardNumber!: string;
-
-  @Field()
-  @IsString()
   firstName!: string;
 
   @Field()
   @IsString()
-  lastName!: string;
+  middleName!: string;
 
   @Field()
   @IsString()
@@ -38,6 +39,15 @@ export class CreatePatientDto {
   @IsOptional()
   @IsString()
   bloodGroup?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  nationalID?: string;
+
+  @Field()
+  @IsDate()
+  cardNumberExpiryDate!: Date;
 
   @Field({ nullable: true })
   @IsOptional()

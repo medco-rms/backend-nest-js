@@ -13,6 +13,7 @@ import {
   RoomsModule,
   TestRequestsModule,
   UsersModule,
+  UtilModule,
 } from './modules/index';
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import {
     TestRequestsModule,
     PrescriptionsModule,
     MedicalDocumentsModule,
+    UtilModule,
   ],
   controllers: [],
   providers: [],

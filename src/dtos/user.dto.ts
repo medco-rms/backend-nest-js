@@ -1,4 +1,10 @@
-import { Field, InputType, PartialType, GraphQLISODateTime } from '@nestjs/graphql';
+import {
+  Field,
+  InputType,
+  PartialType,
+  GraphQLISODateTime,
+  Int,
+} from '@nestjs/graphql';
 import { IsDate, IsEmail, IsOptional, IsString, IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -13,7 +19,8 @@ export class CreateUserDto {
   @IsString()
   middleName?: string;
 
-  @Field()
+  @Field({ nullable: true })
+  @IsOptional()
   @IsString()
   lastName!: string;
 
@@ -38,7 +45,8 @@ export class CreateUserDto {
   @IsEmail()
   email?: string;
 
-  @Field()
+  @Field({ nullable: true })
+  @IsOptional()
   @IsString()
   phone!: string;
 
@@ -64,11 +72,6 @@ export class CreateUserDto {
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  employeeId?: string;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsString()
   specialization?: string;
 
   @Field({ nullable: true })
@@ -87,7 +90,7 @@ export class CreateUserDto {
   @IsDate()
   licenseExpiryDate?: Date;
 
-  @Field({ nullable: true })
+  @Field(() => Int, { nullable: true })
   @IsOptional()
   @IsInt()
   experienceYears?: number;
@@ -97,16 +100,6 @@ export class CreateUserDto {
   @Type(() => Date)
   @IsDate()
   joiningDate?: Date;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsString()
-  emergencyContactName?: string;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsString()
-  emergencyContactPhone?: string;
 
   @Field({ nullable: true })
   @IsOptional()

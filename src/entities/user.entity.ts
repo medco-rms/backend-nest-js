@@ -1,10 +1,18 @@
-import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+  ID,
+  GraphQLISODateTime,
+  Int,
+} from '@nestjs/graphql';
+import { StatusType } from 'src/models';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  Generated,
 } from 'typeorm';
 
 @Entity()
@@ -22,8 +30,8 @@ export class User {
   @Field({ nullable: true })
   middleName?: string;
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   lastName!: string;
 
   @Column({ nullable: true })
@@ -42,8 +50,8 @@ export class User {
   @Field({ nullable: true })
   email?: string;
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   phone!: string;
 
   @Column({ nullable: true })
@@ -62,9 +70,10 @@ export class User {
   @Field({ nullable: true })
   departmentId?: string;
 
-  @Column({ nullable: true })
-  @Field({ nullable: true })
-  employeeId?: string;
+  @Column({ type: 'int', nullable: true, unique: true })
+  @Generated('increment')
+  @Field(() => Int, { nullable: true })
+  employeeId?: number;
 
   @Column({ nullable: true })
   @Field({ nullable: true })
@@ -92,15 +101,11 @@ export class User {
 
   @Column({ nullable: true })
   @Field({ nullable: true })
-  emergencyContactName?: string;
-
-  @Column({ nullable: true })
-  @Field({ nullable: true })
-  emergencyContactPhone?: string;
-
-  @Column({ nullable: true })
-  @Field({ nullable: true })
   note?: string;
+
+  @Column({ nullable: true, default: 'ACTIVE' })
+  @Field({ nullable: true, defaultValue: 'ACTIVE' })
+  status?: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   @Field(() => GraphQLISODateTime)
