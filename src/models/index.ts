@@ -1,7 +1,7 @@
 export type UserRole =
   'DOCTOR' | 'TECHNICIAN' | 'PHARMACIST' | 'NURSE' | 'FRONT_DESK' | 'STAFF';
 export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
-export type DepartmentType = 'EXAMINATION' | 'LAB' | 'SCAN' | 'PHARMACY';
+export type DepartmentType = "EXAMINATION" | "LAB" | "SCAN" | "PHARMACY" | "OTHER";
 export type TestType = 'LAB' | 'SCAN';
 export type roomStatus = 'AVAILABLE' | 'BUSY';
 export type appointmentStatus =
