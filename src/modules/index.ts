@@ -55,7 +55,7 @@ export class PatientsModule {}
 export class DepartmentsModule {}
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Room])],
+  imports: [TypeOrmModule.forFeature([Room, Department])],
   providers: [RoomResolver, RoomService],
 })
 export class RoomsModule {}
