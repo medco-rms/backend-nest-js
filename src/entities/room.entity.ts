@@ -1,5 +1,10 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -16,6 +21,9 @@ export class Room {
   @Field()
   departmentId!: string;
 
+  @Field({ nullable: true })
+  department?: string;
+
   @Column({ type: 'int', nullable: true })
   @Field({ nullable: true })
   capacity?: number;
@@ -23,4 +31,8 @@ export class Room {
   @Column()
   @Field()
   status!: string;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  @Field(() => GraphQLISODateTime)
+  createdAt!: Date;
 }

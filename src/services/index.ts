@@ -49,6 +49,7 @@ export class UserService extends BaseService<
       where: { role },
     });
   }
+
 }
 
 @Injectable()
@@ -81,6 +82,23 @@ export class RoomService extends BaseService<
 > {
   constructor(@InjectRepository(Room) repo: Repository<Room>) {
     super(repo);
+  }
+
+  override async findAll(): Promise<Room[]> {
+    const { entities, raw } = await this.repo
+      .createQueryBuilder('room')
+      .leftJoin(
+        Department,
+        'department',
+        'department.id::text = room.departmentId',
+      )
+      .addSelect('department.name', 'department_name')
+      .getRawAndEntities();
+
+    return entities.map((room, index) => ({
+      ...room,
+      department: raw[index]?.department_name ?? null,
+    }));
   }
 }
 
