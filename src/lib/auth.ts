@@ -5,6 +5,7 @@ import { admin } from 'better-auth/plugins';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../../src/generated/prisma/client';
+import { emailOTP } from 'better-auth/plugins';
 
 type PrismaUser = {
   email: string;
@@ -16,13 +17,15 @@ const BACKEND_URL = new URL(
     process.env.BETTER_AUTH_URL ||
     'http://localhost:3000',
 );
-const FRONTEND_URL = process.env.FRONTEND_ORIGIN ?? 'http://localhost:5173';
-const SMTP_HOST = process.env.SMTP_HOST;
-const SMTP_PORT = Number(process.env.SMTP_PORT ?? '587');
+const FRONTEND_URL =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:5173'
+    : 'http://localhost:5173';
 const SMTP_USER = process.env.SMTP_USER;
 const SMTP_PASS = process.env.SMTP_PASS;
 const SMTP_FROM = process.env.SMTP_FROM ?? SMTP_USER ?? 'no-reply@localhost';
 const hasMailer = Boolean(SMTP_USER && SMTP_PASS);
+const NODE_ENV = process.env.SMTP_PASS;
 
 const app: {
   url: string;
@@ -79,24 +82,6 @@ export const auth_client = ({
       autoSignIn: false,
       requireEmailVerification: hasMailer,
       resetPasswordTokenExpiresIn: 3600,
-      sendResetPassword: async ({
-        user,
-        url,
-      }: {
-        user: { email: string };
-        url: string;
-      }) => {
-        if (!transporter) {
-          return;
-        }
-
-        await transporter.sendMail({
-          from: `"${app?.name}" <${app?.fromEmail}>`,
-          to: user?.email,
-          subject: 'Reset your password',
-          html: `<p>Please reset your password by clicking <a href="${url}">here</a></p>`,
-        });
-      },
     },
     onPasswordChange: async ({ user }: { user: PrismaUser }) => {
       if (!transporter) {
@@ -159,7 +144,26 @@ export const auth_client = ({
         });
       },
     },
-    plugins: [admin()],
+    plugins: [
+      admin(),
+      emailOTP({
+        async sendVerificationOTP({ email, otp, type }) {
+          if (!transporter) {
+            return;
+          }
+
+          if (type === 'forget-password') {
+            await transporter.sendMail({
+              from: `"${app?.name}" <${app?.fromEmail}>`,
+              to: email,
+              subject: 'Reset your password',
+              html: `<p>Please use this <strong>${otp}</strong> one-time-password for reset. 
+              click here <a href="${app?.frontendUrl}/auth/reset-password/?&email=${email}">here</a> to begin.`,
+            });
+          }
+        },
+      }),
+    ],
     trustedOrigins: [app?.url, app?.frontendUrl],
     cookies: {
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
