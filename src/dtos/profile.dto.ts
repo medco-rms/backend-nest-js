@@ -9,7 +9,7 @@ import { IsDate, IsEmail, IsOptional, IsString, IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
 
 @InputType()
-export class CreateUserDto {
+export class CreateProfileDto {
   @Field()
   @IsString()
   firstName!: string;
@@ -108,4 +108,4 @@ export class CreateUserDto {
 }
 
 @InputType()
-export class UpdateUserDto extends PartialType(CreateUserDto) {}
+export class UpdateProfileDto extends PartialType(CreateProfileDto) {}

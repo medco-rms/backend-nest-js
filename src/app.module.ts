@@ -12,11 +12,18 @@ import {
   PrescriptionsModule,
   RoomsModule,
   TestRequestsModule,
-  UsersModule,
+  ProfileModule,
   UtilModule,
 } from './modules/index';
+import { auth } from './lib/auth';
+import { AuthModule } from '@thallesp/nestjs-better-auth';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { AuthService } from './bases/auth.service';
+import { PrismaModule } from '../prisma/prisma.module';
 @Module({
   imports: [
+    AuthModule.forRoot({ auth }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -44,7 +51,7 @@ import {
         logging: true,
       }),
     }),
-    UsersModule,
+    ProfileModule,
     PatientsModule,
     DepartmentsModule,
     RoomsModule,
@@ -54,8 +61,9 @@ import {
     PrescriptionsModule,
     MedicalDocumentsModule,
     UtilModule,
+    PrismaModule
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService, AuthService],
 })
 export class AppModule {}

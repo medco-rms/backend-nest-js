@@ -14,9 +14,9 @@ import {
   Generated,
 } from 'typeorm';
 
-@Entity({ synchronize: false })
+@Entity()
 @ObjectType()
-export class User {
+export class Profile {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
   id!: string;
@@ -105,6 +105,10 @@ export class User {
   @Column({ nullable: true, default: 'ACTIVE' })
   @Field({ nullable: true, defaultValue: 'ACTIVE' })
   status?: string;
+
+  @Column()
+  @Field()
+  better_auth_id!: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   @Field(() => GraphQLISODateTime)

@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Res } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { BaseService } from '../bases/base.service';
 import {
   CreateAppointmentDto,
@@ -11,7 +11,7 @@ import {
   CreatePrescriptionDto,
   CreateRoomDto,
   CreateTestRequestDto,
-  CreateUserDto,
+  CreateProfileDto,
   UpdateAppointmentDto,
   UpdateDepartmentDto,
   UpdateExaminationDto,
@@ -20,8 +20,8 @@ import {
   UpdatePrescriptionDto,
   UpdateRoomDto,
   UpdateTestRequestDto,
-  UpdateUserDto,
-} from 'src/dtos';
+  UpdateProfileDto,
+} from '../../src/dtos';
 import {
   Appointment,
   Department,
@@ -31,25 +31,147 @@ import {
   Prescription,
   Room,
   TestRequest,
-  User,
+  Profile,
 } from '../entities';
+import { User } from '../../src/entities/user.entity';
+import type { Response } from 'express';
+import { handleError } from '../../src/lib/util';
+import AppDataSource from '../../src/data-source';
 
 @Injectable()
-export class UserService extends BaseService<
-  User,
-  CreateUserDto,
-  UpdateUserDto
+export class ProfileService extends BaseService<
+  Profile,
+  CreateProfileDto,
+  UpdateProfileDto
 > {
-  constructor(@InjectRepository(User) repo: Repository<User>) {
+  constructor(@InjectRepository(Profile) repo: Repository<Profile>) {
     super(repo);
   }
 
-  async filterUser(role: string): Promise<User[]> {
-    return this.repo.find({
-      where: { role },
+  async create(
+    dto: CreateProfileDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<any> {
+    const password = this.get_random_password();
+
+    return this.auth_signup({
+      data: {
+        name: `${dto?.firstName} ${dto?.middleName}`,
+        email: dto?.email ?? '',
+        password,
+      },
+
+      after_func: async ({ better_auth_id, tx }) => {
+        await tx.update(
+          User,
+          { id: better_auth_id },
+          {
+            role: dto?.role,
+          },
+        );
+
+        const entity = tx.getRepository(Profile).create({
+          ...dto,
+          better_auth_id,
+        });
+
+        return tx.getRepository(Profile).save(entity);
+      },
+      res,
+      includePasswordInEmailTemplate: true,
     });
   }
 
+  async update(id: string, dto: UpdateProfileDto): Promise<any> {
+    try {
+      if (!id) {
+        throw new Error('Missing id for profile update.');
+      }
+
+      const profile = await this.repo.findOneBy({
+        id: id,
+      });
+
+      if (!profile) {
+        throw new Error('profile record not found.');
+      }
+
+      if (!profile.better_auth_id) {
+        throw new Error('profile record has no better_auth_id.');
+      }
+
+      return await AppDataSource.transaction(async (tx) => {
+        const profileRepo = tx.getRepository(Profile);
+        const userRepo = tx.getRepository(User);
+
+        await profileRepo.update({ id }, dto);
+
+        if (dto.role !== undefined) {
+          await userRepo.update(
+            { id: profile.better_auth_id },
+            {
+              role: dto.role,
+            },
+          );
+        }
+
+        const updatedProfile = await profileRepo.findOne({
+          where: { id },
+        });
+
+        if (!updatedProfile) {
+          throw new Error('Failed to retrieve updated profile record.');
+        }
+
+        return updatedProfile;
+      });
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async remove(id: string): Promise<DeleteResult> {
+    try {
+      const profile = await this.repo.findOne({
+        where: { id },
+      });
+
+      if (!profile) {
+        throw new Error('Profile not found.');
+      }
+
+      if (!profile.better_auth_id) {
+        throw new Error('Profile has no better_auth_id.');
+      }
+
+      return await AppDataSource.transaction(async (tx) => {
+        const profileRepo = tx.getRepository(Profile);
+        const userRepo = tx.getRepository(User);
+
+        const result = await profileRepo.delete({
+          id,
+        });
+
+        await userRepo.delete({
+          id: profile.better_auth_id,
+        });
+
+        return result;
+      });
+    } catch (error) {
+      handleError(error);
+      throw error;
+    }
+  }
+
+  async filterProfile(role: string): Promise<Profile[]> {
+    return this.repo.find({
+      where: { role },
+      order: {
+        createdAt: -1,
+      },
+    });
+  }
 }
 
 @Injectable()

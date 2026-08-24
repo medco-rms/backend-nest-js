@@ -9,7 +9,7 @@ import {
   Prescription,
   Room,
   TestRequest,
-  User,
+  Profile,
 } from '../entities';
 import {
   AppointmentResolver,
@@ -20,7 +20,7 @@ import {
   PrescriptionResolver,
   RoomResolver,
   TestRequestResolver,
-  UserResolver,
+  ProfileResolver,
   UtilResolver,
 } from '../resolvers';
 import {
@@ -32,15 +32,15 @@ import {
   PrescriptionService,
   RoomService,
   TestRequestService,
-  UserService,
+  ProfileService,
   UtilService,
 } from '../services';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
-  providers: [UserResolver, UserService],
+  imports: [TypeOrmModule.forFeature([Profile])],
+  providers: [ProfileResolver, ProfileService],
 })
-export class UsersModule {}
+export class ProfileModule {}
 
 @Module({
   imports: [TypeOrmModule.forFeature([Patient])],

@@ -1,9 +1,13 @@
+import 'dotenv/config';
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    // bodyParser: false,
+  });
   // Enable CORS for frontend development
   const allowedOrigins = [
     process.env.FRONTEND_ORIGIN ?? 'http://localhost:5173',

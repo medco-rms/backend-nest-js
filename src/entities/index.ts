@@ -1,4 +1,4 @@
-export * from './user.entity';
+export * from './profile.entity';
 export * from './patient.entity';
 export * from './department.entity';
 export * from './room.entity';

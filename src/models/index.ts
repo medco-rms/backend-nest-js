@@ -22,7 +22,6 @@ export interface User {
   lastName?: string;
   gender?: Gender;
   dateOfBirth?: Date;
-
   profileImage?: string;
 
   // Contact Information
