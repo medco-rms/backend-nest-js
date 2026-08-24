@@ -1,9 +1,11 @@
+import { Res } from '@nestjs/common';
 import { Args, ID, Mutation, Query } from '@nestjs/graphql';
+import type { Response } from 'express';
 
 type Type<T = any> = new (...args: any[]) => T;
 
 export interface BaseService<TCreateDto = any, TUpdateDto = any> {
-  create(dto: TCreateDto): Promise<any>;
+  create(dto: TCreateDto, res: Response): Promise<any>;
   findAll(): Promise<any[]>;
   findOne(id: string): Promise<any | null>;
   update(id: string, dto: TUpdateDto): Promise<any>;
@@ -44,8 +46,11 @@ export function BaseResolver<
     }
 
     @Mutation(() => entityType, { name: `create${entityType.name}` })
-    async create(@Args('input', { type: () => createInputType }) dto: TCreateDto) {
-      return this.service.create(dto);
+    async create(
+      @Args('input', { type: () => createInputType }) dto: TCreateDto,
+      @Res({ passthrough: true }) res: Response,
+    ) {
+      return this.service.create(dto, res);
     }
 
     @Mutation(() => entityType, { name: `update${entityType.name}` })

@@ -9,7 +9,7 @@ import {
   Prescription,
   Room,
   TestRequest,
-  User,
+  Profile,
 } from '../entities';
 import {
   AppointmentService,
@@ -20,7 +20,7 @@ import {
   PrescriptionService,
   RoomService,
   TestRequestService,
-  UserService,
+  ProfileService,
   UtilService,
 } from '../services';
 import {
@@ -32,7 +32,7 @@ import {
   CreatePrescriptionDto,
   CreateRoomDto,
   CreateTestRequestDto,
-  CreateUserDto,
+  CreateProfileDto,
   UpdateAppointmentDto,
   UpdateDepartmentDto,
   UpdateExaminationDto,
@@ -41,23 +41,23 @@ import {
   UpdatePrescriptionDto,
   UpdateRoomDto,
   UpdateTestRequestDto,
-  UpdateUserDto,
-} from 'src/dtos';
+  UpdateProfileDto,
+} from '../../src/dtos';
 
-@Resolver(() => User)
-export class UserResolver extends BaseResolver<
-  User,
-  CreateUserDto,
-  UpdateUserDto,
-  UserService
->(User, CreateUserDto, UpdateUserDto, 'users') {
-  constructor(service: UserService) {
+@Resolver(() => Profile)
+export class ProfileResolver extends BaseResolver<
+  Profile,
+  CreateProfileDto,
+  UpdateProfileDto,
+  ProfileService
+>(Profile, CreateProfileDto, UpdateProfileDto, 'profiles') {
+  constructor(service: ProfileService) {
     super(service);
   }
 
-  @Query(() => [User], { name: 'filterUser' })
-  async filterUser(@Args('role') role: string) {
-    return this.service.filterUser(role);
+  @Query(() => [Profile], { name: 'filterProfile' })
+  async filterProfile(@Args('role') role: string) {
+    return this.service.filterProfile(role);
   }
 }
 
